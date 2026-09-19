@@ -33,8 +33,6 @@ body{
 }
 
 .nav-toggle{display:none}
-/* spacer only used on mobile */
-.nav-spacer{display:none}
 .nav-top{display:block}
 .nav-top-text{display:block}
 
@@ -45,9 +43,10 @@ body{
     padding-top:12px;
   }
   .sidenav{
-    position:relative !important;
-    top:auto; left:auto; right:auto;
+    position:sticky;
+    top:10px;
     z-index:50;
+    align-self:start;
     max-height:none !important;
     width:100%;
     margin:0 0 12px;
@@ -55,25 +54,6 @@ body{
     border-radius:18px;
     box-shadow:0 8px 22px rgba(42,36,28,.10);
     background:rgba(255,250,242,.96);
-  }
-  /* scrolled: float & pin to top */
-  .sidenav.is-floating{
-    position:fixed !important;
-    top:10px; left:12px; right:12px;
-    margin:0;
-    box-shadow:0 12px 32px rgba(42,36,28,.18);
-    background:rgba(255,250,242,.92);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-  }
-  /* spacer keeps content from jumping when nav becomes fixed */
-  .nav-spacer{
-    display:none;
-    width:100%;
-    flex-shrink:0;
-  }
-  .nav-spacer.is-on{
-    display:block !important;
   }
   .sidenav .brand{font-size:.9rem; margin:0 0 2px}
   .sidenav .sub{display:none} /* keep bar compact on phone */
@@ -113,7 +93,6 @@ body{
   .sidenav:not(.is-open) #nav{display:none}
   .sidenav.is-open #nav{display:flex; margin-top:8px}
   .sidenav.is-open .nav-top-text{display:block; flex:1; min-width:0}
-  .shell{padding-top:72px}
 }
 
 .card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow)}
@@ -228,7 +207,6 @@ body{
       <button type="button" data-page="4">Day 4 · 回程<span class="d">10/12 一 · Dean Village → Bolton</span></button>
     </nav>
   </aside>
-  <div class="nav-spacer" id="navSpacer" aria-hidden="true"></div>
 
   <main class="main">
     <article class="page active" data-page="1">
@@ -404,10 +382,6 @@ function setNavOpen(open){
   // only meaningful on mobile; desktop CSS hides toggle
   sidenav.classList.toggle('is-open', !!open);
   navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-  // keep spacer height correct while floating
-  if(navSpacer && sidenav.classList.contains('is-floating')){
-    navSpacer.style.height = sidenav.offsetHeight + 'px';
-  }
 }
 
 function syncToggleLabel(p){
@@ -443,54 +417,8 @@ document.addEventListener('click', (e)=>{
   setNavOpen(false);
 });
 
-const navSpacer=document.getElementById('navSpacer');
-let navBaseTop=0;
-function measureNav(){
-  if(!sidenav) return;
-  const floating=sidenav.classList.contains('is-floating');
-  if(floating){
-    // temporarily unfloat to measure natural top
-    sidenav.classList.remove('is-floating');
-    if(navSpacer) navSpacer.classList.remove('is-on');
-  }
-  navBaseTop = sidenav.getBoundingClientRect().top + window.scrollY;
-  if(floating){
-    sidenav.classList.add('is-floating');
-    if(navSpacer){
-      navSpacer.style.height = sidenav.offsetHeight + 'px';
-      navSpacer.classList.add('is-on');
-    }
-  }
-}
-function onScrollNav(){
-  if(!sidenav || !window.matchMedia('(max-width:900px)').matches){
-    if(sidenav) sidenav.classList.remove('is-floating');
-    if(navSpacer){ navSpacer.classList.remove('is-on'); navSpacer.style.height='0px'; }
-    return;
-  }
-  const shouldFloat = window.scrollY > Math.max(8, navBaseTop - 8);
-  if(shouldFloat){
-    if(!sidenav.classList.contains('is-floating')){
-      if(navSpacer){
-        navSpacer.style.height = sidenav.offsetHeight + 'px';
-        navSpacer.classList.add('is-on');
-      }
-      sidenav.classList.add('is-floating');
-    }
-  }else{
-    sidenav.classList.remove('is-floating');
-    if(navSpacer){ navSpacer.classList.remove('is-on'); navSpacer.style.height='0px'; }
-  }
-}
-window.addEventListener('scroll', onScrollNav, {passive:true});
-window.addEventListener('resize', ()=>{ measureNav(); onScrollNav(); });
-// after maps/fonts settle
-setTimeout(()=>{ measureNav(); onScrollNav(); }, 50);
-
 showPage(1);
 setNavOpen(false);
-measureNav();
-onScrollNav();
 window.addEventListener('resize', ()=>Object.values(maps).forEach(m=>m.invalidateSize()));
 </script>
 </body>
