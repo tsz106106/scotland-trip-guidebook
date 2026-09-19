@@ -31,6 +31,11 @@ body{
   display:grid; grid-template-columns:var(--nav-w) minmax(0,1fr);
   gap:16px; padding:16px;
 }
+
+.nav-toggle{display:none}
+.nav-top{display:block}
+.nav-top-text{display:block}
+
 @media(max-width:900px){
   .shell{
     grid-template-columns:1fr;
@@ -71,6 +76,23 @@ body{
   .page.active{grid-template-columns:1fr !important}
   .map-slot{position:relative !important; top:auto !important}
   .day-map{height:min(48vh,380px) !important; max-height:none !important}
+
+  .nav-top{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:0}
+  .nav-toggle{
+    display:inline-flex; align-items:center; gap:6px;
+    appearance:none; border:0; cursor:pointer;
+    background:var(--band); color:#f4efe6; font-weight:700;
+    border-radius:999px; padding:8px 12px; font-size:.82rem;
+    box-shadow:0 4px 14px rgba(47,74,60,.25);
+  }
+  .sidenav.edin-day .nav-toggle{background:var(--band2)}
+  .nav-toggle-chevron{transition:transform .2s ease; font-size:.75rem}
+  .sidenav.is-open .nav-toggle-chevron{transform:rotate(180deg)}
+  .sidenav .nav-top-text{display:none}
+  .sidenav:not(.is-open) #nav{display:none}
+  .sidenav.is-open #nav{display:flex; margin-top:8px}
+  .sidenav.is-open .nav-top-text{display:block; flex:1; min-width:0}
+  .shell{padding-top:72px}
 }
 
 .card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow)}
@@ -167,9 +189,17 @@ body{
 </head>
 <body>
 <div class="shell">
-  <aside class="sidenav card">
-    <div class="brand">蘇格蘭四日行</div>
-    <p class="sub">10/9–12 · 自駕 + 狗<br>Bolton → Glasgow → Edinburgh</p>
+  <aside class="sidenav card" id="sidenav">
+    <div class="nav-top">
+      <div class="nav-top-text">
+        <div class="brand">蘇格蘭四日行</div>
+        <p class="sub">10/9–12 · 自駕 + 狗<br>Bolton → Glasgow → Edinburgh</p>
+      </div>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="nav" title="展開／收起日程">
+        <span class="nav-toggle-label" id="navToggleLabel">Day 1</span>
+        <span class="nav-toggle-chevron" aria-hidden="true">▾</span>
+      </button>
+    </div>
     <nav id="nav">
       <button type="button" data-page="1" class="active">Day 1 · 格市抵達<span class="d">10/9 五 · 先食 → 主街 → 墓地</span></button>
       <button type="button" data-page="2">Day 2 · 格市全日<span class="d">10/10 六 · 西區／河畔 → 高地牛</span></button>
@@ -342,11 +372,52 @@ function showPage(p){
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active', b.dataset.page===p));
   requestAnimationFrame(()=>ensureMap(Number(p)));
 }
+const sidenav=document.getElementById('sidenav');
+const navToggle=document.getElementById('navToggle');
+const navToggleLabel=document.getElementById('navToggleLabel');
+const dayShort={1:'Day 1',2:'Day 2',3:'Day 3',4:'Day 4'};
+
+function setNavOpen(open){
+  if(!sidenav || !navToggle) return;
+  // only meaningful on mobile; desktop CSS hides toggle
+  sidenav.classList.toggle('is-open', !!open);
+  navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function syncToggleLabel(p){
+  if(navToggleLabel) navToggleLabel.textContent = dayShort[p] || ('Day '+p);
+  if(sidenav){
+    sidenav.classList.toggle('edin-day', p==='3' || p==='4' || p===3 || p===4);
+  }
+}
+
+const _showPage = showPage;
+showPage = function(p){
+  _showPage(p);
+  syncToggleLabel(String(p));
+  // after picking a day on mobile, collapse
+  if(window.matchMedia('(max-width:900px)').matches) setNavOpen(false);
+};
+
+if(navToggle){
+  navToggle.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    setNavOpen(!sidenav.classList.contains('is-open'));
+  });
+}
 document.getElementById('nav').addEventListener('click', e=>{
   const btn=e.target.closest('button[data-page]');
   if(btn) showPage(btn.dataset.page);
 });
+// tap outside closes on mobile
+document.addEventListener('click', (e)=>{
+  if(!window.matchMedia('(max-width:900px)').matches) return;
+  if(!sidenav || !sidenav.classList.contains('is-open')) return;
+  if(sidenav.contains(e.target)) return;
+  setNavOpen(false);
+});
 showPage(1);
+setNavOpen(false);
 window.addEventListener('resize', ()=>Object.values(maps).forEach(m=>m.invalidateSize()));
 </script>
 </body>
