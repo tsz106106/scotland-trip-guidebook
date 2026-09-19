@@ -33,6 +33,7 @@ body{
 }
 
 .nav-toggle{display:none}
+.nav-spacer{display:none !important}
 .nav-top{display:block}
 .nav-top-text{display:block}
 
@@ -40,19 +41,37 @@ body{
   .shell{
     grid-template-columns:1fr;
     padding:12px;
-    padding-top:86px; /* room for floating top nav */
+    padding-top:12px;
   }
   .sidenav{
-    position:fixed !important;
-    top:10px; left:12px; right:12px;
+    position:relative !important;
+    top:auto; left:auto; right:auto;
     z-index:50;
     max-height:none !important;
+    width:100%;
+    margin:0 0 12px;
     padding:10px 10px 8px;
     border-radius:18px;
+    box-shadow:0 8px 22px rgba(42,36,28,.10);
+    background:rgba(255,250,242,.96);
+  }
+  /* scrolled: float & pin to top */
+  .sidenav.is-floating{
+    position:fixed !important;
+    top:10px; left:12px; right:12px;
+    margin:0;
     box-shadow:0 12px 32px rgba(42,36,28,.18);
     background:rgba(255,250,242,.92);
     backdrop-filter:blur(12px);
     -webkit-backdrop-filter:blur(12px);
+  }
+  /* spacer keeps content from jumping when nav becomes fixed */
+  .nav-spacer{
+    display:none;
+    width:100%;
+  }
+  .nav-spacer.is-on{
+    display:block;
   }
   .sidenav .brand{font-size:.9rem; margin:0 0 2px}
   .sidenav .sub{display:none} /* keep bar compact on phone */
@@ -207,6 +226,7 @@ body{
       <button type="button" data-page="4">Day 4 · 回程<span class="d">10/12 一 · Dean Village → Bolton</span></button>
     </nav>
   </aside>
+  <div class="nav-spacer" id="navSpacer" aria-hidden="true"></div>
 
   <main class="main">
     <article class="page active" data-page="1">
@@ -382,6 +402,10 @@ function setNavOpen(open){
   // only meaningful on mobile; desktop CSS hides toggle
   sidenav.classList.toggle('is-open', !!open);
   navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  // keep spacer height correct while floating
+  if(navSpacer && sidenav.classList.contains('is-floating')){
+    navSpacer.style.height = sidenav.offsetHeight + 'px';
+  }
 }
 
 function syncToggleLabel(p){
@@ -416,8 +440,55 @@ document.addEventListener('click', (e)=>{
   if(sidenav.contains(e.target)) return;
   setNavOpen(false);
 });
+
+const navSpacer=document.getElementById('navSpacer');
+let navBaseTop=0;
+function measureNav(){
+  if(!sidenav) return;
+  const floating=sidenav.classList.contains('is-floating');
+  if(floating){
+    // temporarily unfloat to measure natural top
+    sidenav.classList.remove('is-floating');
+    if(navSpacer) navSpacer.classList.remove('is-on');
+  }
+  navBaseTop = sidenav.getBoundingClientRect().top + window.scrollY;
+  if(floating){
+    sidenav.classList.add('is-floating');
+    if(navSpacer){
+      navSpacer.style.height = sidenav.offsetHeight + 'px';
+      navSpacer.classList.add('is-on');
+    }
+  }
+}
+function onScrollNav(){
+  if(!sidenav || !window.matchMedia('(max-width:900px)').matches){
+    if(sidenav) sidenav.classList.remove('is-floating');
+    if(navSpacer){ navSpacer.classList.remove('is-on'); navSpacer.style.height='0px'; }
+    return;
+  }
+  const shouldFloat = window.scrollY > Math.max(8, navBaseTop - 8);
+  if(shouldFloat){
+    if(!sidenav.classList.contains('is-floating')){
+      if(navSpacer){
+        navSpacer.style.height = sidenav.offsetHeight + 'px';
+        navSpacer.classList.add('is-on');
+      }
+      sidenav.classList.add('is-floating');
+    }
+  }else{
+    sidenav.classList.remove('is-floating');
+    if(navSpacer){ navSpacer.classList.remove('is-on'); navSpacer.style.height='0px'; }
+  }
+}
+window.addEventListener('scroll', onScrollNav, {passive:true});
+window.addEventListener('resize', ()=>{ measureNav(); onScrollNav(); });
+// after maps/fonts settle
+setTimeout(()=>{ measureNav(); onScrollNav(); }, 50);
+
 showPage(1);
 setNavOpen(false);
+measureNav();
+onScrollNav();
 window.addEventListener('resize', ()=>Object.values(maps).forEach(m=>m.invalidateSize()));
 </script>
 </body>
