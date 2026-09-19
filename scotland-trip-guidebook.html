@@ -103,6 +103,13 @@ body{
 .page.edin .route li::before{background:var(--band2)}
 .stop-title{font-weight:700; font-size:.92rem}
 .stop-note{color:var(--muted); font-size:.8rem; margin-top:2px}
+.time{
+  display:inline-block; font-size:.72rem; font-weight:700;
+  color:var(--band); background:rgba(47,74,60,.1);
+  border-radius:999px; padding:2px 8px; margin-right:6px;
+}
+.page.edin .time{color:var(--band2); background:rgba(139,69,19,.1)}
+.day-timing{font-size:.8rem; color:var(--muted); margin:0 0 10px; line-height:1.45}
 .dog{
   display:inline-block; font-size:.68rem; font-weight:600;
   padding:2px 7px; border-radius:999px; margin-left:6px; vertical-align:2px;
@@ -147,11 +154,12 @@ body{
         </div>
         <div class="card route-card">
           <h2>當日路線</h2>
-          <ol class="route">
-            <li data-n="1"><div class="stop-title">C. Cafe（港人餐廳）<span class="dog no">狗 · 室內通常 ✕</span></div><div class="stop-note">到步先食</div></li>
-            <li data-n="2"><div class="stop-title">Buchanan Street<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">附近主街</div></li>
-            <li data-n="3"><div class="stop-title">炸 Mars bar<span class="dog out">狗 · 店外 ⚠</span></div><div class="stop-note">彈性小食</div></li>
-            <li data-n="4"><div class="stop-title">墓地 + 大教堂<span class="dog out">狗 · 戶外／部分 ⚠</span></div><div class="stop-note">Necropolis 外圍可牽繩</div></li>
+          <p class="day-timing">估算骨架：Bolton→Glasgow 自駕約 3.5–4.5 小時（視交通）· 建議午後到步再行景。</p>
+                    <ol class="route">
+            <li data-n="1"><div class="stop-title"><span class="time">~15:00</span>C. Cafe（港人餐廳）<span class="dog no">狗 · 室內通常 ✕</span></div><div class="stop-note">到步先食 · 約 45–60 分</div></li>
+            <li data-n="2"><div class="stop-title"><span class="time">~16:00</span>Buchanan Street<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">附近主街散步 · 約 30–45 分</div></li>
+            <li data-n="3"><div class="stop-title"><span class="time">~16:45</span>炸 Mars bar<span class="dog out">狗 · 店外 ⚠</span></div><div class="stop-note">彈性小食 · 約 15–20 分</div></li>
+            <li data-n="4"><div class="stop-title"><span class="time">~17:15</span>墓地 + 大教堂<span class="dog out">狗 · 戶外／部分 ⚠</span></div><div class="stop-note">Necropolis 外圍 · 約 45–60 分 · 建議 18:30 前收</div></li>
           </ol>
         </div>
       </div>
@@ -172,10 +180,11 @@ body{
         </div>
         <div class="card route-card">
           <h2>當日路線</h2>
-          <ol class="route">
-            <li data-n="1"><div class="stop-title">大學區<span class="dog out">狗 · 外圍 ⚠</span></div><div class="stop-note">West End</div></li>
-            <li data-n="2"><div class="stop-title">River Clyde 河畔<span class="dog yes">狗 · ✅</span></div><div class="stop-note">同西區較順</div></li>
-            <li data-n="3"><div class="stop-title">高地牛公園（Pollok）<span class="dog yes">狗 · ✅</span></div><div class="stop-note">南下自駕串</div></li>
+          <p class="day-timing">估算骨架：全日約 10:00–17:00 · Pollok 來回自駕合計約 40–50 分。</p>
+                    <ol class="route">
+            <li data-n="1"><div class="stop-title"><span class="time">~10:00</span>大學區<span class="dog out">狗 · 外圍 ⚠</span></div><div class="stop-note">West End 慢行 · 約 1–1.5 小時</div></li>
+            <li data-n="2"><div class="stop-title"><span class="time">~11:45</span>River Clyde 河畔<span class="dog yes">狗 · ✅</span></div><div class="stop-note">同西區較順 · 約 45–60 分</div></li>
+            <li data-n="3"><div class="stop-title"><span class="time">~14:00</span>高地牛公園（Pollok）<span class="dog yes">狗 · ✅</span></div><div class="stop-note">南下自駕約 20–25 分 · 園內約 2–2.5 小時</div></li>
           </ol>
         </div>
       </div>
@@ -196,14 +205,15 @@ body{
         </div>
         <div class="card route-card">
           <h2>當日路線</h2>
-          <ol class="route">
-            <li data-n="1"><div class="stop-title">Residence Inn（入住）<span class="dog yes">狗 · ✅</span></div><div class="stop-note">先安頓</div></li>
-            <li data-n="2"><div class="stop-title">Edinburgh Castle（外面）<span class="dog no">狗 · 入內 ✕</span></div><div class="stop-note">外望為主</div></li>
-            <li data-n="3"><div class="stop-title">Victoria Street<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">Old Town</div></li>
-            <li data-n="4"><div class="stop-title">Greyfriars Bobby 雕像<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">短停</div></li>
-            <li data-n="5"><div class="stop-title">High Street（Royal Mile）<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">往東接 Calton</div></li>
-            <li data-n="6"><div class="stop-title">吃飯（One Plate 或旮旯）<span class="dog no">狗 · 室內通常 ✕</span></div><div class="stop-note">擇一</div></li>
-            <li data-n="7"><div class="stop-title">Calton Hill · 日落<span class="dog yes">狗 · ✅</span></div><div class="stop-note">放最後</div></li>
+          <p class="day-timing">估算骨架：上午轉城 · Old Town 步行簇約 3–4 小時 · 日落放最後。</p>
+                    <ol class="route">
+            <li data-n="1"><div class="stop-title"><span class="time">~11:00</span>Residence Inn（入住）<span class="dog yes">狗 · ✅</span></div><div class="stop-note">格→愛自駕約 1–1.25 小時 · 入住約 20–30 分</div></li>
+            <li data-n="2"><div class="stop-title"><span class="time">~12:00</span>Edinburgh Castle（外面）<span class="dog no">狗 · 入內 ✕</span></div><div class="stop-note">外望／拍照 · 約 20–30 分</div></li>
+            <li data-n="3"><div class="stop-title"><span class="time">~12:30</span>Victoria Street<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">Old Town · 約 20–30 分</div></li>
+            <li data-n="4"><div class="stop-title"><span class="time">~13:00</span>Greyfriars Bobby 雕像<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">短停 · 約 10–15 分</div></li>
+            <li data-n="5"><div class="stop-title"><span class="time">~13:20</span>High Street（Royal Mile）<span class="dog out">狗 · 街外 ⚠</span></div><div class="stop-note">往東行 · 約 40–60 分</div></li>
+            <li data-n="6"><div class="stop-title"><span class="time">~15:00</span>吃飯（One Plate 或旮旯）<span class="dog no">狗 · 室內通常 ✕</span></div><div class="stop-note">擇一 · 約 60–75 分</div></li>
+            <li data-n="7"><div class="stop-title"><span class="time">~17:30</span>Calton Hill · 日落<span class="dog yes">狗 · ✅</span></div><div class="stop-note">10 月日落約 18:20–18:40 · 預留 60–90 分</div></li>
           </ol>
         </div>
       </div>
@@ -224,10 +234,11 @@ body{
         </div>
         <div class="card route-card">
           <h2>當日路線</h2>
-          <ol class="route">
-            <li data-n="1"><div class="stop-title">Dean Village<span class="dog yes">狗 · ✅</span></div><div class="stop-note">晨走</div></li>
-            <li data-n="2"><div class="stop-title">順路自駕 · 想停就停<span class="dog out">狗 · 視地點</span></div><div class="stop-note">無壓力</div></li>
-            <li data-n="3"><div class="stop-title">開返 Bolton<span class="dog yes">狗 · 車上 ✅</span></div><div class="stop-note">回程</div></li>
+          <p class="day-timing">估算骨架：上午 Dean · 中午前後上路 · 回程預留休息。</p>
+                    <ol class="route">
+            <li data-n="1"><div class="stop-title"><span class="time">~09:30</span>Dean Village<span class="dog yes">狗 · ✅</span></div><div class="stop-note">晨走 · 約 45–75 分</div></li>
+            <li data-n="2"><div class="stop-title"><span class="time">~11:00</span>順路自駕 · 想停就停<span class="dog out">狗 · 視地點</span></div><div class="stop-note">彈性 · 0–60 分</div></li>
+            <li data-n="3"><div class="stop-title"><span class="time">~12:00</span>開返 Bolton<span class="dog yes">狗 · 車上 ✅</span></div><div class="stop-note">自駕約 3.5–4.5 小時 · 傍晚到</div></li>
           </ol>
         </div>
       </div>
